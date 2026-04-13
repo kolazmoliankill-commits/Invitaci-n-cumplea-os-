@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación de Hogwarts - Yoselin</title>
+    <title>Invitación Mágica</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -16,6 +16,19 @@
             font-family: 'Georgia', serif;
         }
 
+        /* EFECTO DE LUZ (FLASH) */
+        #flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
         #contenedor {
             position: relative;
             width: 90%;
@@ -26,7 +39,7 @@
         /* SOBRE */
         #seccion-sobre {
             cursor: pointer;
-            transition: all 0.8s ease;
+            transition: all 0.6s ease-in;
         }
 
         #sobre-img {
@@ -35,31 +48,23 @@
             border-radius: 10px;
         }
 
-        .instruccion {
-            color: #d4af37;
-            margin-top: 15px;
-            font-size: 14px;
-            letter-spacing: 2px;
-            animation: parpadeo 2s infinite;
-        }
-
         /* CARTA */
         #seccion-carta {
             display: none;
             opacity: 0;
-            transform: scale(0.8);
-            transition: all 1s ease;
+            transform: scale(0.5);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #invitacion-img {
             width: 100%;
             border: 2px solid #d4af37;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
         }
 
         .boton-ws {
             display: inline-block;
-            background: #740001; /* Rojo Gryffindor */
+            background: #740001;
             color: white;
             padding: 15px 25px;
             text-decoration: none;
@@ -70,13 +75,24 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        @keyframes parpadeo {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        /* ANIMACIÓN DE LUZ */
+        .luz-activa {
+            animation: destello 0.8s parseFloat;
         }
+
+        @keyframes destello {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .instruccion { color: #d4af37; margin-top: 15px; animation: parpadeo 2s infinite; }
+        @keyframes parpadeo { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
     </style>
 </head>
 <body>
+
+    <div id="flash"></div>
 
     <audio id="musica" loop>
         <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=5792d472-8877-49f9-968b-57774e1d702d" type="audio/mpeg">
@@ -84,12 +100,12 @@
 
     <div id="contenedor">
         <div id="seccion-sobre" onclick="abrirCarta()">
-            <img src="sobre.jpg" id="sobre-img" alt="Sobre con sello rojo">
+            <img src="sobre.jpg" id="sobre-img">
             <p class="instruccion">PULSA EL SELLO PARA ABRIR</p>
         </div>
 
         <div id="seccion-carta">
-            <img src="invitacion.png" id="invitacion-img" alt="Invitación Yoselin">
+            <img src="invitacion.png" id="invitacion-img">
             <br>
             <a id="linkWs" href="#" class="boton-ws">CONFIRMAR ASISTENCIA ⚡</a>
         </div>
@@ -97,33 +113,35 @@
 
     <script>
         function abrirCarta() {
-            // Activar música
-            const audio = document.getElementById('musica');
-            audio.play().catch(e => console.log("Audio esperando interacción"));
+            // 1. Sonido
+            document.getElementById('musica').play();
 
-            // Desvanecer sobre
+            // 2. Efecto de Luz (Flash)
+            const flash = document.getElementById('flash');
+            flash.classList.add('luz-activa');
+
+            // 3. Transición de imágenes
             const sobre = document.getElementById('seccion-sobre');
-            sobre.style.opacity = "0";
-            sobre.style.transform = "scale(1.2) translateY(-50px)";
+            const carta = document.getElementById('seccion-carta');
 
             setTimeout(() => {
                 sobre.style.display = "none";
-                
-                // Mostrar invitación
-                const carta = document.getElementById('seccion-carta');
                 carta.style.display = "block";
                 
                 setTimeout(() => {
                     carta.style.opacity = "1";
                     carta.style.transform = "scale(1)";
                 }, 50);
-            }, 800);
+            }, 400); // El cambio ocurre justo en el pico de la luz
         }
 
-        // CONFIGURACIÓN WHATSAPP MÉXICO
+        // EL LINK DE WHATSAPP (SIN ERRORES)
+        // El número debe ir pegado: Código país (52) + número (7351817365)
         const miNumero = "527351817365"; 
         const mensaje = "¡Hola! Confirmo mi asistencia al cumple de Yoselin. ¡Ahí estaré! 🧙‍♂️✨";
-        document.getElementById('linkWs').href = "https://api.whatsapp.com/send?phone=" + miNumero + "&text=" + encodeURIComponent(mensaje);
+        
+        // Esta es la forma más segura para que WhatsApp lo reconozca
+        document.getElementById('linkWs').href = "https://wa.me/" + miNumero + "?text=" + encodeURIComponent(mensaje);
     </script>
 
 </body>
