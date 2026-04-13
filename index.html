@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación Mágica</title>
     <style>
+        /* ESTILO GENERAL */
         body {
             background-color: #1a1a1a;
             margin: 0;
@@ -16,7 +17,7 @@
             font-family: 'Georgia', serif;
         }
 
-        /* EFECTO DE LUZ (FLASH) */
+        /* EFECTO DE LUZ (DESTELLO) */
         #flash {
             position: fixed;
             top: 0;
@@ -36,49 +37,58 @@
             text-align: center;
         }
 
-        /* SOBRE */
+        /* VISTA DEL SOBRE */
         #seccion-sobre {
             cursor: pointer;
-            transition: all 0.6s ease-in;
+            transition: all 0.5s ease-in;
         }
 
         #sobre-img {
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             border-radius: 10px;
         }
 
-        /* CARTA */
+        .instruccion {
+            color: #d4af37;
+            margin-top: 15px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            animation: parpadeo 2s infinite;
+        }
+
+        /* VISTA DE LA CARTA (OCULTA) */
         #seccion-carta {
             display: none;
             opacity: 0;
-            transform: scale(0.5);
+            transform: scale(0.6);
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #invitacion-img {
             width: 100%;
             border: 2px solid #d4af37;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
+            border-radius: 5px;
         }
 
+        /* BOTÓN DE WHATSAPP */
         .boton-ws {
             display: inline-block;
-            background: #740001;
+            background: #740001; /* Rojo Gryffindor */
             color: white;
-            padding: 15px 25px;
+            padding: 16px 28px;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
             font-weight: bold;
             border: 2px solid #d4af37;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            font-size: 16px;
         }
 
-        /* ANIMACIÓN DE LUZ */
-        .luz-activa {
-            animation: destello 0.8s parseFloat;
-        }
+        /* ANIMACIONES */
+        .luz-activa { animation: destello 0.7s ease-out; }
 
         @keyframes destello {
             0% { opacity: 0; }
@@ -86,8 +96,10 @@
             100% { opacity: 0; }
         }
 
-        .instruccion { color: #d4af37; margin-top: 15px; animation: parpadeo 2s infinite; }
-        @keyframes parpadeo { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        @keyframes parpadeo {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -100,12 +112,12 @@
 
     <div id="contenedor">
         <div id="seccion-sobre" onclick="abrirCarta()">
-            <img src="sobre.jpg" id="sobre-img">
+            <img src="sobre.jpg" id="sobre-img" alt="Sobre con sello">
             <p class="instruccion">PULSA EL SELLO PARA ABRIR</p>
         </div>
 
         <div id="seccion-carta">
-            <img src="invitacion.png" id="invitacion-img">
+            <img src="invitacion.png" id="invitacion-img" alt="Invitación">
             <br>
             <a id="linkWs" href="#" class="boton-ws">CONFIRMAR ASISTENCIA ⚡</a>
         </div>
@@ -113,14 +125,15 @@
 
     <script>
         function abrirCarta() {
-            // 1. Sonido
-            document.getElementById('musica').play();
+            // Iniciar música
+            const audio = document.getElementById('musica');
+            audio.play().catch(() => console.log("Esperando clic"));
 
-            // 2. Efecto de Luz (Flash)
+            // Efecto de Luz Blanca
             const flash = document.getElementById('flash');
             flash.classList.add('luz-activa');
 
-            // 3. Transición de imágenes
+            // Cambio de secciones
             const sobre = document.getElementById('seccion-sobre');
             const carta = document.getElementById('seccion-carta');
 
@@ -132,15 +145,14 @@
                     carta.style.opacity = "1";
                     carta.style.transform = "scale(1)";
                 }, 50);
-            }, 400); // El cambio ocurre justo en el pico de la luz
+            }, 350); // El cambio ocurre durante el destello
         }
 
-        // EL LINK DE WHATSAPP (SIN ERRORES)
-        // El número debe ir pegado: Código país (52) + número (7351817365)
+        // CONFIGURACIÓN FINAL WHATSAPP MÉXICO
         const miNumero = "527351817365"; 
-        const mensaje = "¡Hola! Confirmo mi asistencia al cumple de Yoselin. ¡Ahí estaré! 🧙‍♂️✨";
+        const mensaje = "¡Hola! Confirmo mi asistencia al cumpleaños. ¡Ahí estaré! 🧙‍♂️✨";
         
-        // Esta es la forma más segura para que WhatsApp lo reconozca
+        // Link directo wa.me (el más confiable)
         document.getElementById('linkWs').href = "https://wa.me/" + miNumero + "?text=" + encodeURIComponent(mensaje);
     </script>
 
