@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación Mágica - Yoselin</title>
+    <title>Invitación de Hogwarts - Yoselin</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -19,45 +19,47 @@
         #contenedor {
             position: relative;
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
         }
 
-        /* ESTILO DEL SOBRE */
-        #sobre {
-            width: 100%;
+        /* SOBRE */
+        #seccion-sobre {
             cursor: pointer;
-            transition: transform 0.8s, opacity 0.8s;
-            z-index: 2;
+            transition: all 0.8s ease;
         }
 
-        /* ESTILO DE LA CARTA (OCULTA AL INICIO) */
-        #carta {
+        #sobre-img {
             width: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity 1s;
-            transform: scale(0.9);
-            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border-radius: 10px;
         }
 
         .instruccion {
-            color: white;
-            margin-top: 10px;
+            color: #d4af37;
+            margin-top: 15px;
             font-size: 14px;
             letter-spacing: 2px;
             animation: parpadeo 2s infinite;
         }
 
-        @keyframes parpadeo {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
+        /* CARTA */
+        #seccion-carta {
+            display: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s ease;
+        }
+
+        #invitacion-img {
+            width: 100%;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
         }
 
         .boton-ws {
-            display: none;
-            background: #740001;
+            display: inline-block;
+            background: #740001; /* Rojo Gryffindor */
             color: white;
             padding: 15px 25px;
             text-decoration: none;
@@ -65,6 +67,12 @@
             margin-top: 20px;
             font-weight: bold;
             border: 2px solid #d4af37;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        @keyframes parpadeo {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
@@ -76,12 +84,12 @@
 
     <div id="contenedor">
         <div id="seccion-sobre" onclick="abrirCarta()">
-            <img src="sobre.jpg" id="sobre" alt="Sobre de Hogwarts">
-            <p class="instruccion">TOCA EL SELLO PARA ABRIR</p>
+            <img src="sobre.jpg" id="sobre-img" alt="Sobre con sello rojo">
+            <p class="instruccion">PULSA EL SELLO PARA ABRIR</p>
         </div>
 
         <div id="seccion-carta">
-            <img src="invitacion.png" id="carta" alt="Invitación Yoselin">
+            <img src="invitacion.png" id="invitacion-img" alt="Invitación Yoselin">
             <br>
             <a id="linkWs" href="#" class="boton-ws">CONFIRMAR ASISTENCIA ⚡</a>
         </div>
@@ -89,36 +97,34 @@
 
     <script>
         function abrirCarta() {
-            // Reproducir música
-            document.getElementById('musica').play();
+            // Activar música
+            const audio = document.getElementById('musica');
+            audio.play().catch(e => console.log("Audio esperando interacción"));
 
-            // Animación de salida del sobre
-            const sobre = document.getElementById('sobre');
-            const instruccion = document.querySelector('.instruccion');
-            sobre.style.transform = "translateY(-100px) scale(1.2)";
+            // Desvanecer sobre
+            const sobre = document.getElementById('seccion-sobre');
             sobre.style.opacity = "0";
-            instruccion.style.display = "none";
+            sobre.style.transform = "scale(1.2) translateY(-50px)";
 
             setTimeout(() => {
-                document.getElementById('seccion-sobre').style.display = "none";
+                sobre.style.display = "none";
                 
-                // Mostrar la carta de Yoselin
-                const carta = document.getElementById('carta');
-                const boton = document.querySelector('.boton-ws');
+                // Mostrar invitación
+                const carta = document.getElementById('seccion-carta');
                 carta.style.display = "block";
-                boton.style.display = "inline-block";
                 
                 setTimeout(() => {
                     carta.style.opacity = "1";
                     carta.style.transform = "scale(1)";
-                }, 100);
+                }, 50);
             }, 800);
         }
 
-        // CONFIGURACIÓN DE WHATSAPP
-        const miNumero = "573XXXXXXXXX"; // PON TU NÚMERO AQUÍ
-        const mensaje = "¡Hola Yoselin! Confirmo mi asistencia a tu cumple. ¡Gracias por la invitación! 🧙‍♂️✨";
+        // CONFIGURACIÓN WHATSAPP MÉXICO
+        const miNumero = "527351817365"; 
+        const mensaje = "¡Hola! Confirmo mi asistencia al cumple de Yoselin. ¡Ahí estaré! 🧙‍♂️✨";
         document.getElementById('linkWs').href = "https://api.whatsapp.com/send?phone=" + miNumero + "&text=" + encodeURIComponent(mensaje);
     </script>
+
 </body>
 </html>
